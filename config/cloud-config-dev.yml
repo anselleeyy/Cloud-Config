@@ -10,4 +10,4 @@ eureka:
     service-url:
       defaultZone: http://registry1:9001/eureka/, http://registry2:9002/eureka/, http://registry3:9003/eureka/
 
-info: info-er
+info: info-eureka
