@@ -1,0 +1,30 @@
+server:
+  port: 10075
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://cdb-ldgxpfr8.bj.tencentcdb.com:10123/clouddb?characterEncoding=utf8&useSSL=false
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      username: cloud
+      password: cloud0802
+      minimum-idle: 3
+      maximum-pool-size: 10
+      max-lifetime: 30000
+      connection-test-query: SELECT 1
+  jpa:
+    database: MYSQL
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+    properties:
+      hibernate: 
+        dialect: org.hibernate.dialect.MySQL5Dialect
+eureka:
+  client:
+    service-url:
+      defaultZone: http://registry1:9001/eureka/, http://registry2:9002/eureka/, http://registry3:9003/eureka/
+  instance:
+    prefer-ip-address: true
