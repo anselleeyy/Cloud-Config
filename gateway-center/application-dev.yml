@@ -1,0 +1,15 @@
+server:  port: 8000
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          lower-case-service-id: true
+          enabled: true
+      routes:
+      - id: consume-server
+        uri: lb://consume-server
+        predicates:
+        - Path=/consume-server/**
+        filters:
+        - StripPrefix=1eureka:  client:    service-url:      defaultZone: http://registry1:9001/eureka/, http://registry2:9002/eureka/, http://registry3:9003/eureka/
