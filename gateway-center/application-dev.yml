@@ -1,15 +1,26 @@
-server:  port: 8000
+server:
+  port: 8000
 spring:
   cloud:
     gateway:
       discovery:
         locator:
-          lower-case-service-id: true
-          enabled: true
+          lower-case-service-id: true  # 将请求路径上的服务名配置为小写（因为服务注册的时候，向注册中心注册时将服务名转成大写的了）
+          enabled: true  # 表明 gateway 服务启动服务注册和发现的能力
       routes:
-      - id: consume-server
-        uri: lb://consume-server
+      - id: consume_server  # 服务 id
+        uri: lb://consume-server  # lb代表从注册中心获取服务（负载均衡）
         predicates:
-        - Path=/consume-server/**
+        - Path=/api/consume-server/**  # 匹配请求的 URL
         filters:
-        - StripPrefix=1eureka:  client:    service-url:      defaultZone: http://registry1:9001/eureka/, http://registry2:9002/eureka/, http://registry3:9003/eureka/
+        - name: RequestRateLimiter  # 启用 RequestRateLimiter
+          args:
+            key-resolver: '#{@hostAddrKeyResolver}'  # 用于限流的键的解析器的 Bean 对象的名字，#{@beanName}
+            redis-rate-limiter.replenishRate: 1  # 令牌桶每秒填充平均速率
+            redis-rate-limiter.burstCapacity: 3  # 令牌桶总容量
+        - StripPrefix=2  # 对路径进行加工
+  redis:
+    host: 10.11.124.101
+    database: 0
+    port: 6379
+    timeout: 10000
